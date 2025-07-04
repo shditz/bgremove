@@ -213,16 +213,10 @@ async function checkBackendHealth() {
       const data = await response.json();
       console.log("Backend ready:", data);
     } else {
-      showNotification(
-        "⚠️ Backend tidak tersedia. Pastikan server Flask berjalan.",
-        "error"
-      );
+      showNotification("⚠️ Server tidak merespons.", "error");
     }
   } catch (error) {
     console.error("Backend check failed:", error);
-    showNotification(
-      "⚠️ Tidak dapat terhubung ke server. Pastikan Flask berjalan di port 5000.",
-      "error"
-    );
+    showNotification("⚠️ Tidak dapat menghubngi server.", "error");
   }
 }
