@@ -3,17 +3,18 @@
   "builds": [
     {
       "src": "Dockerfile",
-      "use": "@vercel/docker",
+      "use": "@vercel/static-build",
       "config": {
-        "maxLambdaSize": "300mb",
-        "maxDuration": 120
+        "distDir": "app",
+        "runtime": "edge",
+        "maxLambdaSize": "300mb"
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/app"
+      "dest": "app/$1"
     }
   ]
 }
