@@ -1,20 +1,53 @@
-# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
+*.pyc
 venv/
+env/
+.venv/
+app/__pycache__/
 
-# Node
-node_modules/
-
-# Environment variables
 .env
+.venv
+env/
+venv/
+ENV/
 
-# System
-.DS_Store
-Thumbs.db
 
-# IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+
+*.log
+logs/
+
+
+.cache/
+
+
+~u2net*
+~/.u2net/
+~/.rembg/
+
+
+*.jpg
+*.jpeg
+*.png
+*.zip
+*.tar.gz
+
+!app/requirements.txt
+!app/app.py
+!app/performance_config.py
+!index.html
+!js/script.js
