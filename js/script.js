@@ -166,7 +166,7 @@ function resetZoom(imageId) {
 function downloadImage() {
   if (window.processedImageUrl) {
     const link = document.createElement("a");
-    link.download = "bg-remove-" + ".png";
+    link.download = "bg-remove" + ".png";
     link.href = window.processedImageUrl;
     link.click();
 
