@@ -1,9 +1,12 @@
+<!-- File: index.html -->
+
 <!DOCTYPE html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hapus Background dengan teknologi AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       rel="stylesheet"
@@ -13,6 +16,12 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"
+      crossorigin="anonymous"
+    ></script>
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <style>
       :root {
@@ -673,7 +682,8 @@
         </div>
       </div>
     </footer>
+    <script src="js/bgremove.js"></script>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>

@@ -1,3 +1,5 @@
+#performance_config.py
+
 import os
 import torch
 
@@ -7,7 +9,7 @@ os.environ['MKL_NUM_THREADS'] = '4'
 os.environ['NUMEXPR_NUM_THREADS'] = '4'  
 
 
-torch.set_num_threads(4)  #
+torch.set_num_threads(4)  
 torch.backends.cudnn.benchmark = True  
 
 
