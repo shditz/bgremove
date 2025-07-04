@@ -2,14 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "app/app.py",
-      "use": "@vercel/python"
+      "src": "Dockerfile",
+      "use": "@vercel/docker",
+      "config": {
+        "maxLambdaSize": "300mb",
+        "maxDuration": 120
+      }
     }
   ],
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "app/app.py"
+      "src": "/(.*)",
+      "dest": "/app"
     }
   ]
 }
