@@ -348,43 +348,45 @@ export default function Home() {
           </div>
 
           <div className="glass-effect rounded-3xl p-6 md:p-8 mb-16">
-            <div
-              className="upload-area rounded-2xl p-8 mb-8 text-center cursor-pointer"
-              onClick={() => fileInputRef.current.click()}
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add("dragover");
-              }}
-              onDragEnter={(e) => {
-                e.preventDefault();
-                e.currentTarget.classList.add("dragover");
-              }}
-              onDragLeave={(e) => {
-                e.preventDefault();
-                e.currentTarget.classList.remove("dragover");
-              }}
-              onDrop={handleDrop}
-            >
-              <div className="hero-icon">
-                <i className="fas fa-cloud-upload-alt"></i>
+            {!originalImageSrc && (
+              <div
+                className="upload-area rounded-2xl p-8 mb-8 text-center cursor-pointer"
+                onClick={() => fileInputRef.current.click()}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.add("dragover");
+                }}
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.add("dragover");
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.classList.remove("dragover");
+                }}
+                onDrop={handleDrop}
+              >
+                <div className="hero-icon">
+                  <i className="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3 className="text-2xl font-semibold text-white mb-3">
+                  Select or Drop Image
+                </h3>
+                <p className="text-gray-300 mb-6">
+                  Drag & drop images or click to select from your device
+                </p>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleFileSelect}
+                />
+                <div className="text-gray-400 text-sm">
+                  Supported formats: JPG, PNG, WEBP (Maximum 20MB)
+                </div>
               </div>
-              <h3 className="text-2xl font-semibold text-white mb-3">
-                Select or Drop Image
-              </h3>
-              <p className="text-gray-300 mb-6">
-                Drag & drop images or click to select from your device
-              </p>
-              <input
-                type="file"
-                ref={fileInputRef}
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileSelect}
-              />
-              <div className="text-gray-400 text-sm">
-                Supported formats: JPG, PNG, WEBP (Maximum 20MB)
-              </div>
-            </div>
+            )}
 
             {showQualitySelector && (
               <div className="quality-selector mb-8">
