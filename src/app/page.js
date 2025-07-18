@@ -2,6 +2,8 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Script from "next/script";
+import * as tf from "@tensorflow/tfjs";
+import * as cocoSsd from "@tensorflow-models/coco-ssd";
 
 export default function Home() {
   const [currentFile, setCurrentFile] = useState(null);
@@ -31,8 +33,7 @@ export default function Home() {
       try {
         await import("@tensorflow/tfjs");
         const cocoSsdModule = await import("@tensorflow-models/coco-ssd");
-        const cocoSsd = await cocoSsdModule.load();
-
+        const detectionModel = await cocoSsdModule.load();
         const selfieSegmentation = await new Promise((resolve) => {
           const script = document.createElement("script");
           script.src =
@@ -46,23 +47,45 @@ export default function Home() {
               })
             );
           };
+          script.onerror = () => resolve(null);
           document.body.appendChild(script);
         });
 
-        selfieSegmentation.setOptions({
-          modelSelection: 1,
+        if (selfieSegmentation) {
+          selfieSegmentation.setOptions({
+            modelSelection: 1,
+          });
+          await selfieSegmentation.initialize();
+        }
+        const localProcessor = await new Promise((resolve) => {
+          const script = document.createElement("script");
+          script.src = "/js/bgremove.js";
+          script.onload = () => {
+            if (window.AdvancedBackgroundRemover) {
+              resolve(window.AdvancedBackgroundRemover);
+            } else {
+              resolve(null);
+            }
+          };
+          script.onerror = () => resolve(null);
+          document.body.appendChild(script);
         });
 
-        await selfieSegmentation.initialize();
-
         bgRemoverRef.current = {
-          detectionModel: cocoSsd,
+          detectionModel,
           segmentationModel: selfieSegmentation,
+          localProcessor,
         };
       } catch (error) {
         console.error("Error loading models:", error);
+        bgRemoverRef.current = {
+          detectionModel: null,
+          segmentationModel: null,
+          localProcessor: window.AdvancedBackgroundRemover || null,
+        };
       }
     };
+
     loadModels();
 
     const preventDefault = (e) => e.preventDefault();
@@ -202,11 +225,6 @@ export default function Home() {
         await new Promise((resolve) => {
           image.onload = resolve;
         });
-        const detectedObject = bgRemoverRef.current.detectionModel
-          ? await detectObjectType(image)
-          : "unknown";
-
-        setProcessingStatus(`Detect: ${detectedObject}`);
 
         processedBlob = await processImageLocally(image);
       }
@@ -233,12 +251,19 @@ export default function Home() {
     return predictions.length > 0 ? predictions[0].class : "unknown";
   };
   const processImageLocally = async (image) => {
+    if (!window.AdvancedBackgroundRemover) {
+      throw new Error("Local processor not loaded");
+    }
+    const processor = new window.AdvancedBackgroundRemover();
+    const quality = selectedQuality;
+    const processedImageData = await processor.processImage(image, quality);
+    const canvas = document.createElement("canvas");
+    canvas.width = processedImageData.width;
+    canvas.height = processedImageData.height;
+    const ctx = canvas.getContext("2d");
+    ctx.putImageData(processedImageData, 0, 0);
+
     return new Promise((resolve) => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image, 0, 0);
       canvas.toBlob(resolve, "image/png");
     });
   };
